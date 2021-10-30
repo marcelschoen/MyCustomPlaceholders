@@ -6,6 +6,11 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
+/**
+ * PlaceholderAPI (PAPI) expansion.
+ *
+ * @author Marcel Schoen
+ */
 public class CustomPlaceholdersExpansion extends PlaceholderExpansion {
 
     private final CustomPlaceholders plugin;

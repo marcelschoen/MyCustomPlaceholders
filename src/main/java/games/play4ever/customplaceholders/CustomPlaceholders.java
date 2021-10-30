@@ -22,7 +22,8 @@ public final class CustomPlaceholders extends JavaPlugin implements CommandExecu
 
     private Map<String, String> placeholders = new HashMap<>();
     private List<String> placeholderNames = new ArrayList<>();
-    private List<String> completions = null;
+    private List<String> completions = new ArrayList<>();
+    private boolean enabled = false;
 
     @Override
     public void onEnable() {
@@ -51,22 +52,27 @@ public final class CustomPlaceholders extends JavaPlugin implements CommandExecu
             targetDirectory.mkdirs();
         }
         File placeholderConfig = new File(targetDirectory, "customPlaceholders.properties");
-        Properties props = new Properties();
-        try {
-            props.load(new FileInputStream(placeholderConfig));
-        } catch (IOException e) {
-            Bukkit.getLogger().info("((CustomPlaceholders)) No custom placeholders configured.");
-            e.printStackTrace();
-        }
-        Set<String> keys = props.stringPropertyNames();
-        placeholders.clear();
-        for(String key : keys) {
-            placeholders.put(key, props.getProperty(key));
-            placeholderNames.add(key);
-        }
-        getLogger().info("Loaded custom placeholders configuration. Placeholders: ");
-        for(String customPlaceholder : placeholderNames) {
-            getLogger().info("> custom placeholder: " + customPlaceholder + "=" + placeholders.get(customPlaceholder));
+        if(placeholderConfig.exists()) {
+            Properties props = new Properties();
+            try {
+                props.load(new FileInputStream(placeholderConfig));
+            } catch (IOException e) {
+                Bukkit.getLogger().info("((CustomPlaceholders)) Failed to read custom placeholders config, reason: " + e.toString());
+                e.printStackTrace();
+            }
+            Set<String> keys = props.stringPropertyNames();
+            placeholders.clear();
+            for(String key : keys) {
+                placeholders.put(key, props.getProperty(key));
+                placeholderNames.add(key);
+            }
+            getLogger().info("Loaded custom placeholders configuration. Placeholders: ");
+            for(String customPlaceholder : placeholderNames) {
+                getLogger().info("> custom placeholder: " + customPlaceholder + "=" + placeholders.get(customPlaceholder));
+            }
+            if(placeholders.size() > 0) {
+                enabled = true;
+            }
         }
     }
 
@@ -78,7 +84,7 @@ public final class CustomPlaceholders extends JavaPlugin implements CommandExecu
     @Override
     public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args) {
         final String cmd = command.getName();
-        if (!cmd.equalsIgnoreCase("custompapi")) {
+        if (!cmd.equalsIgnoreCase("custompapi") && !cmd.equalsIgnoreCase("cpapi")) {
             return false;
         }
         if (args.length != 1) {
@@ -140,6 +146,7 @@ public final class CustomPlaceholders extends JavaPlugin implements CommandExecu
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        placeholders.clear();
+        placeholderNames.clear();
     }
 }

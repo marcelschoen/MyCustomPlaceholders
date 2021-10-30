@@ -23,7 +23,6 @@ public final class CustomPlaceholders extends JavaPlugin implements CommandExecu
     private Map<String, String> placeholders = new HashMap<>();
     private List<String> placeholderNames = new ArrayList<>();
     private List<String> completions = new ArrayList<>();
-    private boolean enabled = false;
 
     @Override
     public void onEnable() {
@@ -69,9 +68,6 @@ public final class CustomPlaceholders extends JavaPlugin implements CommandExecu
             getLogger().info("Loaded custom placeholders configuration. Placeholders: ");
             for(String customPlaceholder : placeholderNames) {
                 getLogger().info("> custom placeholder: " + customPlaceholder + "=" + placeholders.get(customPlaceholder));
-            }
-            if(placeholders.size() > 0) {
-                enabled = true;
             }
         }
     }

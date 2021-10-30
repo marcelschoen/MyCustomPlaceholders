@@ -1,0 +1,12 @@
+name: CustomPlaceholders
+version: '${project.version}'
+main: games.play4ever.customplaceholders.CustomPlaceholders
+api-version: 1.17
+prefix: CustomPlaceholders
+depend: [PlaceholderAPI]
+author: MarcelSchoen
+description: Creates custom PAPI placeholders.
+commands:
+  custompapi:
+    description: Main command.
+    aliases: [cpapi, custompapi]

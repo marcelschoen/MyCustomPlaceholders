@@ -11,16 +11,16 @@ import java.util.List;
  *
  * @author Marcel Schoen
  */
-public class CustomPlaceholdersExpansion extends PlaceholderExpansion {
+public class MyCustomPlaceholdersExpansion extends PlaceholderExpansion {
 
-    private final CustomPlaceholders plugin;
+    private final MyCustomPlaceholders plugin;
 
     /**
      * Creates the expansion instance.
      *
      * @param plugin The name generator handler.
      */
-    public CustomPlaceholdersExpansion(CustomPlaceholders plugin) {
+    public MyCustomPlaceholdersExpansion(MyCustomPlaceholders plugin) {
         this.plugin = plugin;
     }
 

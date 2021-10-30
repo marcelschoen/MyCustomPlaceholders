@@ -18,7 +18,7 @@ import java.util.*;
  *
  * @author Marcel Schoen
  */
-public final class CustomPlaceholders extends JavaPlugin implements CommandExecutor, TabCompleter {
+public final class MyCustomPlaceholders extends JavaPlugin implements CommandExecutor, TabCompleter {
 
     private Map<String, String> placeholders = new HashMap<>();
     private List<String> placeholderNames = new ArrayList<>();
@@ -31,7 +31,7 @@ public final class CustomPlaceholders extends JavaPlugin implements CommandExecu
         // Small check to make sure that PlaceholderAPI is installed
         if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             Bukkit.getLogger().info("((CustomPlaceholders)) Registering PAPI expansion...");
-            new CustomPlaceholdersExpansion(this).register();
+            new MyCustomPlaceholdersExpansion(this).register();
         } else {
             Bukkit.getLogger().info("((CustomPlaceholders)) PlaceholderAPI not found.");
         }

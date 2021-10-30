@@ -23,6 +23,7 @@ public final class MyCustomPlaceholders extends JavaPlugin implements CommandExe
     private Map<String, String> placeholders = new HashMap<>();
     private List<String> placeholderNames = new ArrayList<>();
     private List<String> completions = new ArrayList<>();
+    private final String CONFIG_FILENAME = "myCustomPlaceholders.properties";
 
     @Override
     public void onEnable() {
@@ -30,10 +31,10 @@ public final class MyCustomPlaceholders extends JavaPlugin implements CommandExe
 
         // Small check to make sure that PlaceholderAPI is installed
         if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            Bukkit.getLogger().info("((CustomPlaceholders)) Registering PAPI expansion...");
+            Bukkit.getLogger().info("((MyCustomPlaceholders)) Registering PAPI expansion...");
             new MyCustomPlaceholdersExpansion(this).register();
         } else {
-            Bukkit.getLogger().info("((CustomPlaceholders)) PlaceholderAPI not found.");
+            Bukkit.getLogger().info("((MyCustomPlaceholders)) PlaceholderAPI not found.");
         }
 
         completions = new ArrayList<>(Arrays.asList("reload"));
@@ -50,13 +51,20 @@ public final class MyCustomPlaceholders extends JavaPlugin implements CommandExe
         if(!targetDirectory.exists()) {
             targetDirectory.mkdirs();
         }
-        File placeholderConfig = new File(targetDirectory, "customPlaceholders.properties");
+        File placeholderConfig = new File(targetDirectory, CONFIG_FILENAME);
+        if(!placeholderConfig.exists()) {
+            File targetFile = new File(getDataFolder(), CONFIG_FILENAME);
+            if(!targetFile.exists()) {
+                getLogger().info("((MyCustomPlaceholders)) Creating placeholders configuration file: " + CONFIG_FILENAME);
+                saveResource(CONFIG_FILENAME, false);
+            }
+        }
         if(placeholderConfig.exists()) {
             Properties props = new Properties();
             try {
                 props.load(new FileInputStream(placeholderConfig));
             } catch (IOException e) {
-                Bukkit.getLogger().info("((CustomPlaceholders)) Failed to read custom placeholders config, reason: " + e.toString());
+                Bukkit.getLogger().info("((MyCustomPlaceholders)) Failed to read custom placeholders config, reason: " + e.toString());
                 e.printStackTrace();
             }
             Set<String> keys = props.stringPropertyNames();
@@ -104,6 +112,9 @@ public final class MyCustomPlaceholders extends JavaPlugin implements CommandExe
      */
     public String getPlaceholderValue(String name) {
         String value = placeholders.get(name);
+        if(value == null) {
+            return name;
+        }
         while(value.contains("${")) {
             int start = value.indexOf("${");
             int end = value.indexOf("}");

@@ -124,8 +124,8 @@ public final class MyCustomPlaceholders extends JavaPlugin implements CommandExe
                 String expression = value.substring(start + 2, end);
                 String postPart = value.substring(end + 1);
                 value = prePart + getExpressionValue(expression) + postPart;
-                start = value.indexOf("${");
-                end = value.indexOf("}");
+            } else {
+                break;
             }
         }
 

@@ -6,7 +6,7 @@
 
     <groupId>games.play4ever</groupId>
     <artifactId>MyCustomPlaceholders</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <packaging>jar</packaging>
 
     <name>MyCustomPlaceholders</name>
@@ -64,7 +64,7 @@
         </repository>
         <repository>
             <id>placeholderapi</id>
-            <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+            <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
         </repository>
     </repositories>
 
@@ -78,7 +78,10 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
+            <version>1.8-R0.1-SNAPSHOT</version>
+            <!--
             <version>1.17.1-R0.1-SNAPSHOT</version>
+            -->
             <scope>provided</scope>
         </dependency>
     </dependencies>

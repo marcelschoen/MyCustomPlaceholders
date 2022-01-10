@@ -6,7 +6,7 @@
 
     <groupId>games.play4ever</groupId>
     <artifactId>MyCustomPlaceholders</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <packaging>jar</packaging>
 
     <name>MyCustomPlaceholders</name>

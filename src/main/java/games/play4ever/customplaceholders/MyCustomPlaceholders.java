@@ -2,6 +2,7 @@ package games.play4ever.customplaceholders;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -21,7 +22,7 @@ import java.util.*;
 public final class MyCustomPlaceholders extends JavaPlugin implements CommandExecutor, TabCompleter {
 
     private Map<String, String> placeholders = new HashMap<>();
-    private List<String> placeholderNames = new ArrayList<>();
+    private LinkedHashSet<String> placeholderNames = new LinkedHashSet<>();
     private List<String> completions = new ArrayList<>();
     private final String CONFIG_FILENAME = "myCustomPlaceholders.properties";
 
@@ -32,7 +33,8 @@ public final class MyCustomPlaceholders extends JavaPlugin implements CommandExe
         // Small check to make sure that PlaceholderAPI is installed
         if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             Bukkit.getLogger().info("((MyCustomPlaceholders)) Registering PAPI expansion...");
-            new MyCustomPlaceholdersExpansion(this).register();
+            new MyCustomPlaceholdersExpansion(this, "custompapi").register();
+            new MyCustomPlaceholdersExpansion(this, "cpapi").register();
         } else {
             Bukkit.getLogger().info("((MyCustomPlaceholders)) PlaceholderAPI not found.");
         }
@@ -87,22 +89,50 @@ public final class MyCustomPlaceholders extends JavaPlugin implements CommandExe
 
     @Override
     public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args) {
-        final String cmd = command.getName();
-        if (!cmd.equalsIgnoreCase("custompapi") && !cmd.equalsIgnoreCase("cpapi")) {
+        final String cmd = command.getName().toLowerCase();
+        if (!cmd.equals("custompapi") && !cmd.equals("cpapi")) {
             return false;
         }
-        if (args.length != 1) {
-            return false;
+        if(args.length < 1) {
+            String msg = "Missing command parameters.";
+            sender.sendMessage(ChatColor.RED + msg);
+            getLogger().warning(msg);
         }
+
         if (args[0].equalsIgnoreCase("reload")) {
             getLogger().info("Reloading custom placeholders configuration...");
             readConfig();
+            return true;
+        } else if (args[0].equalsIgnoreCase("help")) {
+            sender.sendMessage(ChatColor.GREEN + "MyCustomPlaceholders commands:");
+            sender.sendMessage(ChatColor.GREEN + "help - shows this help");
+            sender.sendMessage(ChatColor.GREEN + "reload - reload placeholder configuration");
+            sender.sendMessage(ChatColor.GREEN + "set <name> <value> - Sets the configured placeholder <name> to the given <value>");
+            return true;
+        } else if (args[0].equalsIgnoreCase("set")) {
+            if (args.length != 3) {
+                String msg = "Invalid parameters. Syntax: set <name> <value>";
+                sender.sendMessage(ChatColor.RED + msg);
+                getLogger().warning(msg);
+                return false;
+            }
+            String placeholderName = args[1];
+            if(placeholders.get(placeholderName) == null) {
+                String msg = "Cannot set unknown placeholder '" + placeholderName + "'; only configured custom placeholders can be changed.";
+                sender.sendMessage(ChatColor.RED + msg);
+                getLogger().warning(msg);
+                return false;
+            }
+            String placeholderValue = args[2];
+            getLogger().info("Changing custom placeholder '" + placeholderName + "' to value '" + placeholderValue + "'");
+            placeholders.put(placeholderName, placeholderValue);
+            return true;
         }
         return false;
     }
 
     public List<String> getPlaceholderNames() {
-        return placeholderNames;
+        return new ArrayList(placeholderNames);
     }
 
     /**

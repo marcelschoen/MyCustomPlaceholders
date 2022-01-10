@@ -14,13 +14,15 @@ import java.util.List;
 public class MyCustomPlaceholdersExpansion extends PlaceholderExpansion {
 
     private final MyCustomPlaceholders plugin;
+    private String alias = "custompapi";
 
     /**
      * Creates the expansion instance.
      *
      * @param plugin The name generator handler.
      */
-    public MyCustomPlaceholdersExpansion(MyCustomPlaceholders plugin) {
+    public MyCustomPlaceholdersExpansion(MyCustomPlaceholders plugin, String alias) {
+        this.alias = alias;
         this.plugin = plugin;
     }
 
@@ -31,7 +33,7 @@ public class MyCustomPlaceholdersExpansion extends PlaceholderExpansion {
 
     @Override
     public String getIdentifier() {
-        return "custompapi";
+        return this.alias;
     }
 
     @Override
